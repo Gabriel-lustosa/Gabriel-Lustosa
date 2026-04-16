@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gabriel Lustosa</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0a0a0a;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(124, 58, 237, 0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(168, 85, 247, 0.08) 0%, transparent 70%);
+      animation: bgPulse 8s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0%   { opacity: 0.6; transform: scale(1); }
+      100% { opacity: 1;   transform: scale(1.05); }
+    }
+
+    /* ── Particles ── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(168, 85, 247, 0.35);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.6; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* ── Container ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.75rem;
+
+      /* entrance animation — handled per child */
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(60px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* stagger children */
+    .container > * {
+      opacity: 0;
+      transform: translateY(60px);
+      animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .container > *:nth-child(1) { animation-delay: 0.15s; }
+    .container > *:nth-child(2) { animation-delay: 0.40s; }
+    .container > *:nth-child(3) { animation-delay: 0.65s; }
+    .container > *:nth-child(4) { animation-delay: 0.85s; }
+    .container > *:nth-child(5) { animation-delay: 1.00s; }
+
+    /* ── Avatar ── */
+    .avatar {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 4px solid #7c3aed;
+      box-shadow: 0 0 50px rgba(124, 58, 237, 0.5);
+      flex-shrink: 0;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 10%;
+      image-rendering: high-quality;
+    }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+    }
+
+    .header h1 span {
+      color: #a855f7;
+    }
+
+    .header .role {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: #a855f7;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      color: #888;
+      font-weight: 300;
+      line-height: 1.6;
+      margin-top: 0.2rem;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #7c3aed, #a855f7);
+      border-radius: 2px;
+    }
+
+    /* ── Icon buttons ── */
+    .links {
+      display: flex;
+      flex-direction: row;
+      gap: 1.25rem;
+      justify-content: center;
+    }
+
+    .link-btn {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      border: 1px solid #222;
+      background-color: #111;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-5px) scale(1.08);
+    }
+
+    /* Tooltip */
+    .link-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #1e1e1e;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      border: 1px solid #333;
+    }
+
+    .link-btn:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    .btn-linkedin:hover {
+      background-color: #0a66c2;
+      border-color: #0a66c2;
+      box-shadow: 0 10px 30px rgba(10, 102, 194, 0.4);
+    }
+
+    .btn-github:hover {
+      background-color: #7c3aed;
+      border-color: #a855f7;
+      box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+    }
+
+    .btn-email:hover {
+      background-color: #ea580c;
+      border-color: #f97316;
+      box-shadow: 0 10px 30px rgba(234, 88, 12, 0.4);
+    }
+
+    svg {
+      display: block;
+      transition: transform 0.2s ease;
+    }
+
+    .link-btn:hover svg {
+      transform: scale(1.15);
+    }
+
+    /* ── Copy feedback ── */
+    .copy-feedback {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #7c3aed;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 100;
+      white-space: nowrap;
+    }
+
+    .copy-feedback.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── Footer ── */
+    .footer {
+      font-size: 0.9rem;
+      color: #2e2e2e;
+      text-align: center;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      body { padding: 1.5rem; }
+      .header h1 { font-size: 1.5rem; }
+      .link-btn { width: 58px; height: 58px; border-radius: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particles -->
+  <div id="particles"></div>
+
+  <!-- Copy toast -->
+  <div class="copy-feedback" id="copyFeedback">Email copiado!</div>
+
+  <div class="container">
+
+    <div class="avatar">
+      <img src="foto.jpg" alt="Gabriel Lustosa" />
+    </div>
+
+    <div class="header">
+      <div class="role">Analista de Dados + IA</div>
+      <h1>Olá, sou <span>Gabriel Lustosa</span></h1>
+      <p>Bem-vindo ao meu perfil.<br>Conecte-se comigo nas minhas redes.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="links">
+
+      <a href="https://www.linkedin.com/in/gabriellustosa1/" target="_blank" rel="noopener noreferrer"
+         class="link-btn btn-linkedin" data-tooltip="LinkedIn">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+        </svg>
+      </a>
+
+      <a href="https://github.com/Gabriel-lustosa" target="_blank" rel="noopener noreferrer"
+         class="link-btn btn-github" data-tooltip="GitHub">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+      </a>
+
+      <button class="link-btn btn-email" data-tooltip="Copiar email" onclick="copyEmail()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="M2 7l10 7 10-7"/>
+        </svg>
+      </button>
+
+    </div>
+
+    <p class="footer">gabriel_lustosa7@outlook.com &middot; 2026</p>
+
+  </div>
+
+  <script>
+    /* ── Copy email ── */
+    function copyEmail() {
+      navigator.clipboard.writeText('gabriel_lustosa7@outlook.com').then(() => {
+        const el = document.getElementById('copyFeedback');
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 2200);
+      });
+    }
+
+    /* ── Particles ── */
+    const container = document.getElementById('particles');
+    const COUNT = 18;
+
+    for (let i = 0; i < COUNT; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 4 + 2;
+      p.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        left: ${Math.random() * 100}%;
+        animation-duration: ${Math.random() * 14 + 10}s;
+        animation-delay: ${Math.random() * 12}s;
+        opacity: ${Math.random() * 0.5 + 0.2};
+      `;
+      container.appendChild(p);
+    }
+  </script>
+
+</body>
+</html>
