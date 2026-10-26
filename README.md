@@ -10,7 +10,10 @@
 
 ## 📚 Estudando no momento
 
-- Aprendendo **SQL**
+- **SQL**
+- **Python** para análise de dados
+- **DAX** no Power BI
+- Fundamentos de **Engenharia de Dados**
 
 ## 📫 Contato
 
