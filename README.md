@@ -14,6 +14,7 @@
 - **Python** para análise de dados
 - **DAX** no Power BI
 - Fundamentos de **Engenharia de Dados**
+- **IA aplicada ao trabalho com dados**, com os cursos da [Claude Academy](https://academy.claude.com/courses)
 
 ## 📫 Contato
 
