@@ -1,6 +1,6 @@
 # Olá, sou Gabriel Lustosa
 
-**Analista de Dados** sempre buscando transformar dados em informação.
+**Analista de Dados** sempre em busca de transformar dados em informações que apoiam decisões.
 
 ## 🛠️ Ferramentas
 
